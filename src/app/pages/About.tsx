@@ -1,6 +1,5 @@
 import { motion } from "motion/react";
 import { Target, Globe, Users, Award, Lightbulb, Rocket } from "lucide-react";
-import { ImageWithFallback } from "../components/figma/ImageWithFallback";
 import fabianImage from "figma:asset/3932b9868c075c3539c2aa1bea11129a2ef0cab9.png";
 import olanrewajuImage from "figma:asset/cf9dd0fda2f9b5f875e45d96e7d36295593480ef.png";
 import kennyImage from "figma:asset/f315f9be7d6e65ecf7fcb7670bbd080514b7848d.png";
@@ -287,22 +286,21 @@ export function About() {
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                   ) : (
-                    <ImageWithFallback
-                      src={`https://images.unsplash.com/photo-${
-                        [
-                          '1580489944761-15a19d654956',
-                          '1507003211169-0a1dd7228f2d',
-                          '1573497019940-1c28c88b4f3e',
-                          '1500648767791-00dcc994a43e',
-                          '1594744803329-e58b31de8bf5',
-                          '1438761681033-6461ffad8d80',
-                          '1472099645785-5658abf4ff4e',
-                          '1531123897727-8f129e1688ce'
-                        ][index - 1]
-                      }?w=600&fit=crop`}
-                      alt={member.name}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
+                    // Initials rather than a stock photo: an Unsplash portrait
+                    // here would put a stranger's face under a colleague's name.
+                    <div
+                      className="w-full h-full flex items-center justify-center bg-[#0B1C2C] text-white"
+                      aria-label={member.name}
+                    >
+                      <span className="text-3xl font-bold tracking-wider">
+                        {member.name
+                          .split(" ")
+                          .filter(Boolean)
+                          .slice(0, 2)
+                          .map((part) => part[0])
+                          .join("")}
+                      </span>
+                    </div>
                   )}
                 </div>
                 <h4 className="text-lg font-bold text-[#0B1C2C] mb-1">

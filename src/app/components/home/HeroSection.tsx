@@ -35,10 +35,7 @@ export function HeroSection() {
           playsInline
           className="w-full h-full object-cover"
         >
-          <source
-            src="https://blujeansz.com/wp-content/uploads/2025/05/Johannesburg_Skyline_At_Johannesburg_In_Gauteng_South_Africa.mp4"
-            type="video/mp4"
-          />
+          <source src="/media/johannesburg-skyline.mp4" type="video/mp4" />
         </video>
       </div>
 
