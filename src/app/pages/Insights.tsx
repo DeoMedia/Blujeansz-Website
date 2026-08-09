@@ -3,11 +3,13 @@ import { Link } from "react-router";
 import { Calendar, Clock } from "lucide-react";
 import { ImageWithFallback } from "../components/figma/ImageWithFallback";
 import patternBg from "figma:asset/71ddc76d0944f8bd918d3e8110f5c242374d3e98.png";
-import { getInsightsByDate } from "../data/insights";
+import { getPublishedArticles } from "../data/editorial";
+import { ArticleImageFallback } from "./insights/InsightArticle";
 
 export function Insights() {
-  // Get all insights sorted by date (newest first)
-  const allInsights = getInsightsByDate();
+  // Published articles only, newest first. Articles scheduled for a future
+  // date stay hidden until that date passes, matching the CMS rule.
+  const allInsights = getPublishedArticles();
 
   return (
     <div className="pt-20 lg:pt-24">
@@ -70,7 +72,7 @@ export function Insights() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-24">
             {allInsights.map((insight, index) => (
               <Link
-                key={insight.id}
+                key={insight.slug}
                 to={`/insights/${insight.slug}`}
               >
                 <motion.article
@@ -81,14 +83,18 @@ export function Insights() {
                   className="group cursor-pointer"
                 >
                   <div className="relative overflow-hidden rounded-sm mb-6 aspect-[16/10]">
-                    <ImageWithFallback
-                      src={insight.image}
-                      alt={insight.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
+                    {insight.image ? (
+                      <ImageWithFallback
+                        src={insight.image}
+                        alt={insight.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                    ) : (
+                      <ArticleImageFallback />
+                    )}
                     <div className="absolute top-6 left-6">
                       <span className="px-3 py-1 bg-white/90 backdrop-blur-sm text-xs font-semibold text-[#0B1C2C] rounded-sm uppercase tracking-wider">
-                        {insight.category}
+                        {insight.categoryName}
                       </span>
                     </div>
                   </div>
@@ -104,7 +110,7 @@ export function Insights() {
                   <div className="flex items-center gap-4 text-sm text-gray-500">
                     <span className="flex items-center gap-1">
                       <Calendar className="w-4 h-4" />
-                      {insight.date}
+                      {insight.displayDate}
                     </span>
                     <span className="flex items-center gap-1">
                       <Clock className="w-4 h-4" />

@@ -2,11 +2,12 @@ import { motion } from "motion/react";
 import { Link } from "react-router";
 import { ArrowRight, Calendar } from "lucide-react";
 import { ImageWithFallback } from "../figma/ImageWithFallback";
-import { getInsightsByDate } from "../../data/insights";
+import { getPublishedArticles } from "../../data/editorial";
+import { ArticleImageFallback } from "../../pages/insights/InsightArticle";
 
 export function InsightsSection() {
-  // Get the 3 most recent insights
-  const latestInsights = getInsightsByDate(3);
+  // The 3 most recent published articles
+  const latestInsights = getPublishedArticles().slice(0, 3);
 
   return (
     <section className="py-24 lg:py-40 bg-white">
@@ -37,7 +38,7 @@ export function InsightsSection() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-12">
           {latestInsights.map((insight, index) => (
             <Link
-              key={insight.id}
+              key={insight.slug}
               to={`/insights/${insight.slug}`}
             >
               <motion.article
@@ -48,14 +49,18 @@ export function InsightsSection() {
                 className="group cursor-pointer"
               >
                 <div className="relative overflow-hidden rounded-sm mb-6 aspect-[4/3]">
-                  <ImageWithFallback
-                    src={insight.image}
-                    alt={insight.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
+                  {insight.image ? (
+                    <ImageWithFallback
+                      src={insight.image}
+                      alt={insight.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                  ) : (
+                    <ArticleImageFallback />
+                  )}
                   <div className="absolute top-4 left-4">
                     <span className="px-3 py-1 bg-white/90 backdrop-blur-sm text-xs font-semibold text-[#0B1C2C] rounded-sm">
-                      {insight.category}
+                      {insight.categoryName}
                     </span>
                   </div>
                 </div>
@@ -68,7 +73,7 @@ export function InsightsSection() {
                   <div className="flex items-center gap-4 text-sm text-gray-500">
                     <span className="flex items-center gap-1">
                       <Calendar className="w-4 h-4" />
-                      {insight.date}
+                      {insight.displayDate}
                     </span>
                     <span>{insight.readTime}</span>
                   </div>

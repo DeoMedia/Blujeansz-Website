@@ -16,9 +16,7 @@ import { GTBankAirport } from "./pages/case-studies/GTBankAirport";
 import { CovidPrevention } from "./pages/case-studies/CovidPrevention";
 import { GTBankNigeria } from "./pages/case-studies/GTBankNigeria";
 import { TaranisNouvusAfrica } from "./pages/case-studies/TaranisNouvusAfrica";
-import { CulturalTrends2026 } from "./pages/insights/CulturalTrends2026";
-import { YouthCultureGrowthLever } from "./pages/insights/YouthCultureGrowthLever";
-import { ScalingAfricanBrands } from "./pages/insights/ScalingAfricanBrands";
+import { InsightArticle } from "./pages/insights/InsightArticle";
 
 export const router = createBrowserRouter([
   {
@@ -40,9 +38,10 @@ export const router = createBrowserRouter([
       { path: "case-studies/gtbank-nigeria", Component: GTBankNigeria },
       { path: "case-studies/taranis-nouvus-africa", Component: TaranisNouvusAfrica },
       { path: "insights", Component: Insights },
-      { path: "insights/cultural-trends-2026", Component: CulturalTrends2026 },
-      { path: "insights/youth-culture-growth-lever", Component: YouthCultureGrowthLever },
-      { path: "insights/scaling-african-brands", Component: ScalingAfricanBrands },
+      // One dynamic route now serves every article, including the three that
+      // previously had bespoke pages — their old slugs redirect (see
+      // LEGACY_SLUG_REDIRECTS), so existing links keep working.
+      { path: "insights/:slug", Component: InsightArticle },
       { path: "contact", Component: Contact },
     ],
   },
