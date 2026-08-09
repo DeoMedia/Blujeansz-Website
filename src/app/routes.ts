@@ -17,6 +17,20 @@ import { CovidPrevention } from "./pages/case-studies/CovidPrevention";
 import { GTBankNigeria } from "./pages/case-studies/GTBankNigeria";
 import { TaranisNouvusAfrica } from "./pages/case-studies/TaranisNouvusAfrica";
 import { InsightArticle } from "./pages/insights/InsightArticle";
+import { NotFound } from "./pages/NotFound";
+import { AdminLayout } from "./admin/AdminLayout";
+import { AdminLogin } from "./admin/Login";
+import { Dashboard } from "./admin/Dashboard";
+import { InsightsList } from "./admin/InsightsList";
+import { InsightEditor } from "./admin/InsightEditor";
+import {
+  CaseStudiesList,
+  AuthorsList,
+  StaffList,
+  MediaLibrary,
+  UsersList,
+  SettingsScreen,
+} from "./admin/screens";
 
 export const router = createBrowserRouter([
   {
@@ -43,6 +57,26 @@ export const router = createBrowserRouter([
       // LEGACY_SLUG_REDIRECTS), so existing links keep working.
       { path: "insights/:slug", Component: InsightArticle },
       { path: "contact", Component: Contact },
+      { path: "*", Component: NotFound },
+    ],
+  },
+  // The admin area sits outside the public Layout: its own shell, no public
+  // nav or footer, so nothing here can affect the public site's design.
+  { path: "/admin/login", Component: AdminLogin },
+  {
+    path: "/admin",
+    Component: AdminLayout,
+    children: [
+      { index: true, Component: Dashboard },
+      { path: "insights", Component: InsightsList },
+      { path: "insights/new", Component: InsightEditor },
+      { path: "insights/:id/edit", Component: InsightEditor },
+      { path: "case-studies", Component: CaseStudiesList },
+      { path: "authors", Component: AuthorsList },
+      { path: "staff", Component: StaffList },
+      { path: "media", Component: MediaLibrary },
+      { path: "users", Component: UsersList },
+      { path: "settings", Component: SettingsScreen },
     ],
   },
 ]);
