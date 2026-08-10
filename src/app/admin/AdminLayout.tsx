@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { NavLink, Navigate, Outlet, useLocation } from "react-router";
+import { NavLink, Navigate, Outlet, ScrollRestoration, useLocation } from "react-router";
 import {
   LayoutDashboard,
   FileText,
@@ -14,7 +14,6 @@ import {
 } from "lucide-react";
 
 import { AuthProvider, useAuth, hasAtLeastRole } from "./AuthContext";
-import { ScrollToTop } from "../components/ScrollToTop";
 import logoLight from "figma:asset/aa1ba75230506f31800d027742b495f059fdb329.png";
 import type { UserRole } from "../types/database";
 
@@ -70,7 +69,7 @@ function Shell() {
 
   return (
     <div className="min-h-screen bg-gray-50 flex">
-      <ScrollToTop />
+      <ScrollRestoration />
 
       {/* Sidebar */}
       <aside
