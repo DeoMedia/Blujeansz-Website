@@ -46,14 +46,23 @@ export function HeroSection() {
           // showed a magnified slice of it. Constraining the height instead
           // keeps the whole mark on screen, anchored left as on the live site.
           className="relative h-[70%] md:h-[80%] lg:h-[88%] ml-[-4%] md:ml-[-2%] lg:ml-[2%]"
+          // Slides in from off the left edge.
+          //
+          // -900px clears the mark at any realistic viewport: its width tracks
+          // the hero height, reaching roughly 875px on a very tall display. The
+          // container clips with overflow-hidden, so overshooting the start
+          // position costs nothing visually.
+          //
           // Reduced motion still gets the reveal, just without the travel —
           // a slide is precisely what that setting asks us not to do.
-          initial={reduceMotion ? { opacity: 0 } : { opacity: 0, x: -100, scale: 1.06 }}
-          animate={reduceMotion ? { opacity: 0.22 } : { opacity: 0.22, x: 0, scale: 1 }}
+          initial={reduceMotion ? { opacity: 0 } : { opacity: 0, x: -900 }}
+          animate={reduceMotion ? { opacity: 0.22 } : { opacity: 0.22, x: 0 }}
           transition={{
-            duration: reduceMotion ? 0.6 : 1.6,
-            ease: [0.22, 1, 0.36, 1],
-            delay: reduceMotion ? 0 : 0.15,
+            duration: reduceMotion ? 0.6 : 1.5,
+            // Decelerating glide: travels immediately, settles softly, so the
+            // movement is legible rather than reading as a pop.
+            ease: reduceMotion ? "easeOut" : [0.16, 1, 0.3, 1],
+            delay: reduceMotion ? 0 : 0.25,
           }}
         >
           {/* Entry and drift are split across two elements so the infinite
