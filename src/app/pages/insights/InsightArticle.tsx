@@ -43,9 +43,7 @@ export function InsightArticle() {
     };
   }, [article]);
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [slug]);
+  // Scroll reset is handled globally by <ScrollToTop /> in the Layout.
 
   // Old article URLs kept working rather than 404ing.
   const redirect = LEGACY_SLUG_REDIRECTS[slug];

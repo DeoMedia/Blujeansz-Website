@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 
 import { AuthProvider, useAuth, hasAtLeastRole } from "./AuthContext";
+import { ScrollToTop } from "../components/ScrollToTop";
 import logoLight from "figma:asset/aa1ba75230506f31800d027742b495f059fdb329.png";
 import type { UserRole } from "../types/database";
 
@@ -69,6 +70,8 @@ function Shell() {
 
   return (
     <div className="min-h-screen bg-gray-50 flex">
+      <ScrollToTop />
+
       {/* Sidebar */}
       <aside
         className={`fixed lg:static inset-y-0 left-0 z-40 w-64 bg-[#0B1C2C] text-white flex flex-col transition-transform ${
