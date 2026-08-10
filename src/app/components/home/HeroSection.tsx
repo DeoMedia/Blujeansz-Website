@@ -1,31 +1,15 @@
 import { Link } from "react-router";
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import { ArrowRight } from "lucide-react";
 import brandPattern from "figma:asset/d3ed68ee451b305fbc50e90fb3ef65a45cdba864.png";
 
 export function HeroSection() {
+  // The pattern drifts forever; honour the OS setting for anyone who has asked
+  // for less motion.
+  const reduceMotion = useReducedMotion();
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#0B1C2C]">
-      {/* Brand Pattern Background - Architectural Element */}
-      <div className="absolute inset-0 z-0 pointer-events-none flex items-center">
-        <motion.img
-          src={brandPattern}
-          alt=""
-          className="absolute left-[-40%] md:left-[-30%] lg:left-[-20%] top-1/2 -translate-y-1/2 w-[1200px] md:w-[1500px] lg:w-[2000px] object-contain opacity-[0.07]"
-          initial={{ opacity: 0 }}
-          animate={{ 
-            opacity: 0.07,
-            x: [0, 10, 0], 
-            y: [0, -5, 0] 
-          }}
-          transition={{ 
-            opacity: { duration: 1.2, ease: "easeOut" },
-            x: { duration: 16, repeat: Infinity, ease: "easeInOut" },
-            y: { duration: 16, repeat: Infinity, ease: "easeInOut" }
-          }}
-        />
-      </div>
-
       {/* Background Video */}
       <div className="absolute inset-0 opacity-30 z-[1]">
         <video
@@ -46,6 +30,42 @@ export function HeroSection() {
       <div className="absolute inset-0 z-[3]" style={{
         background: 'radial-gradient(ellipse at center, transparent 0%, transparent 40%, rgba(11, 28, 44, 0.4) 100%)'
       }} />
+
+      {/* Brand Pattern - Architectural Element
+          Sits above the video, gradient and vignette (z-[4]) but below the
+          copy (z-10). Underneath them it was invisible no matter how high the
+          opacity went, which is what made it read as missing.
+          The artwork is dark navy line art on transparency — the same colour as
+          the hero behind it. `brightness(0) invert(1)` repaints the strokes
+          pure white while leaving the alpha channel untouched, which is how the
+          original site renders it. */}
+      <div className="absolute inset-0 z-[4] pointer-events-none overflow-hidden">
+        <motion.div
+          className="absolute left-[-40%] md:left-[-30%] lg:left-[-20%] top-1/2 w-[1200px] md:w-[1500px] lg:w-[2000px]"
+          // Reduced motion still gets the reveal, just without the travel —
+          // a 120px slide is precisely what that setting asks us not to do.
+          initial={reduceMotion ? { opacity: 0 } : { opacity: 0, x: -120, scale: 1.08 }}
+          animate={reduceMotion ? { opacity: 0.22 } : { opacity: 0.22, x: 0, scale: 1 }}
+          transition={{
+            duration: reduceMotion ? 0.6 : 1.6,
+            ease: [0.22, 1, 0.36, 1],
+            delay: reduceMotion ? 0 : 0.15,
+          }}
+          style={{ y: "-50%" }}
+        >
+          {/* Entry and drift are split across two elements so the infinite
+              loop never fights the one-shot entry over the same properties. */}
+          <motion.img
+            src={brandPattern}
+            alt=""
+            aria-hidden="true"
+            className="w-full object-contain"
+            style={{ filter: "brightness(0) invert(1)" }}
+            animate={reduceMotion ? undefined : { x: [0, 14, 0], y: [0, -10, 0] }}
+            transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+          />
+        </motion.div>
+      </div>
 
       {/* Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 lg:px-20 py-24 md:py-28 lg:py-32 text-center">
