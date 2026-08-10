@@ -39,19 +39,22 @@ export function HeroSection() {
           the hero behind it. `brightness(0) invert(1)` repaints the strokes
           pure white while leaving the alpha channel untouched, which is how the
           original site renders it. */}
-      <div className="absolute inset-0 z-[4] pointer-events-none overflow-hidden">
+      <div className="absolute inset-0 z-[4] pointer-events-none overflow-hidden flex items-center">
         <motion.div
-          className="absolute left-[-40%] md:left-[-30%] lg:left-[-20%] top-1/2 w-[1200px] md:w-[1500px] lg:w-[2000px]"
+          // Sized by HEIGHT, not width. The artwork is portrait (411x596), so a
+          // width of 2000px made it ~2900px tall and the viewport only ever
+          // showed a magnified slice of it. Constraining the height instead
+          // keeps the whole mark on screen, anchored left as on the live site.
+          className="relative h-[70%] md:h-[80%] lg:h-[88%] ml-[-4%] md:ml-[-2%] lg:ml-[2%]"
           // Reduced motion still gets the reveal, just without the travel —
-          // a 120px slide is precisely what that setting asks us not to do.
-          initial={reduceMotion ? { opacity: 0 } : { opacity: 0, x: -120, scale: 1.08 }}
+          // a slide is precisely what that setting asks us not to do.
+          initial={reduceMotion ? { opacity: 0 } : { opacity: 0, x: -100, scale: 1.06 }}
           animate={reduceMotion ? { opacity: 0.22 } : { opacity: 0.22, x: 0, scale: 1 }}
           transition={{
             duration: reduceMotion ? 0.6 : 1.6,
             ease: [0.22, 1, 0.36, 1],
             delay: reduceMotion ? 0 : 0.15,
           }}
-          style={{ y: "-50%" }}
         >
           {/* Entry and drift are split across two elements so the infinite
               loop never fights the one-shot entry over the same properties. */}
@@ -59,9 +62,9 @@ export function HeroSection() {
             src={brandPattern}
             alt=""
             aria-hidden="true"
-            className="w-full object-contain"
+            className="h-full w-auto object-contain"
             style={{ filter: "brightness(0) invert(1)" }}
-            animate={reduceMotion ? undefined : { x: [0, 14, 0], y: [0, -10, 0] }}
+            animate={reduceMotion ? undefined : { x: [0, 12, 0], y: [0, -8, 0] }}
             transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
           />
         </motion.div>
