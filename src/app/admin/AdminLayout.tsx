@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 
 import { AuthProvider, useAuth, hasAtLeastRole } from "./AuthContext";
+import logoLight from "figma:asset/aa1ba75230506f31800d027742b495f059fdb329.png";
 import type { UserRole } from "../types/database";
 
 /**
@@ -75,8 +76,9 @@ function Shell() {
         }`}
       >
         <div className="px-6 py-6 border-b border-white/10">
-          <span className="text-lg font-bold tracking-wider">BLUJEANSZ</span>
-          <p className="text-xs text-white/50 mt-1 uppercase tracking-wider">Content Manager</p>
+          {/* The light logo — the sidebar is the brand navy. */}
+          <img src={logoLight} alt="BLUJEANSZ" className="h-7 w-auto" />
+          <p className="text-xs text-white/50 mt-2 uppercase tracking-wider">Content Manager</p>
         </div>
 
         <nav className="flex-1 py-4 overflow-y-auto">
@@ -128,7 +130,7 @@ function Shell() {
           <button onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu">
             {menuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
-          <span className="font-bold text-[#0B1C2C]">BLUJEANSZ Admin</span>
+          <span className="font-bold text-[#0B1C2C]">Content Manager</span>
         </header>
 
         <main className="p-6 lg:p-10 max-w-7xl">

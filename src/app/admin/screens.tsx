@@ -12,13 +12,7 @@ import {
   StatusBadge,
   PrimaryButton,
 } from "./components";
-import type {
-  Author,
-  ContentStatus,
-  MediaAsset,
-  Profile,
-  StaffMember,
-} from "../types/database";
+import type { Author, ContentStatus, MediaAsset, StaffMember } from "../types/database";
 
 /** Simple list screens. The insight editor lives in its own module. */
 
@@ -278,61 +272,6 @@ export function MediaLibrary() {
           ))}
         </div>
       )}
-    </>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// Users
-// ---------------------------------------------------------------------------
-
-export function UsersList() {
-  const { data, loading, error, reload } = useAsync(() => api.get<Profile>("/me"), []);
-
-  return (
-    <>
-      <PageHeader
-        title="Users"
-        description="CMS accounts. New users are invited from the Supabase dashboard."
-      />
-
-      {loading ? (
-        <LoadingState />
-      ) : error ? (
-        <ErrorState message={error} onRetry={reload} />
-      ) : (
-        <div className="bg-white border border-gray-200 rounded-sm p-5">
-          <p className="text-sm text-gray-500">
-            Signed in as{" "}
-            <span className="font-medium text-[#0B1C2C]">{data?.email}</span> (
-            {data?.role.replace("_", " ")}).
-          </p>
-          <p className="text-sm text-gray-500 mt-3">
-            Full user management — inviting, changing roles and granting publish rights — is
-            the next piece of admin work. Roles can be set directly in the{" "}
-            <code className="text-xs">profiles</code> table meanwhile.
-          </p>
-        </div>
-      )}
-    </>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// Settings
-// ---------------------------------------------------------------------------
-
-export function SettingsScreen() {
-  return (
-    <>
-      <PageHeader title="Settings" description="Site-wide configuration." />
-      <div className="bg-white border border-gray-200 rounded-sm p-5">
-        <p className="text-sm text-gray-500">
-          Settings are stored in the <code className="text-xs">site_settings</code> table and
-          seeded with defaults (site meta, contact email, page size, social links). The editing
-          screen for them is not built yet.
-        </p>
-      </div>
     </>
   );
 }

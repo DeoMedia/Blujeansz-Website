@@ -23,14 +23,10 @@ import { AdminLogin } from "./admin/Login";
 import { Dashboard } from "./admin/Dashboard";
 import { InsightsList } from "./admin/InsightsList";
 import { InsightEditor } from "./admin/InsightEditor";
-import {
-  CaseStudiesList,
-  AuthorsList,
-  StaffList,
-  MediaLibrary,
-  UsersList,
-  SettingsScreen,
-} from "./admin/screens";
+import { CaseStudiesList, AuthorsList, StaffList, MediaLibrary } from "./admin/screens";
+import { CaseStudyEditor } from "./admin/CaseStudyEditor";
+import { UsersScreen } from "./admin/UsersScreen";
+import { SettingsScreen } from "./admin/SettingsScreen";
 
 export const router = createBrowserRouter([
   {
@@ -72,10 +68,12 @@ export const router = createBrowserRouter([
       { path: "insights/new", Component: InsightEditor },
       { path: "insights/:id/edit", Component: InsightEditor },
       { path: "case-studies", Component: CaseStudiesList },
+      { path: "case-studies/new", Component: CaseStudyEditor },
+      { path: "case-studies/:id/edit", Component: CaseStudyEditor },
       { path: "authors", Component: AuthorsList },
       { path: "staff", Component: StaffList },
       { path: "media", Component: MediaLibrary },
-      { path: "users", Component: UsersList },
+      { path: "users", Component: UsersScreen },
       { path: "settings", Component: SettingsScreen },
     ],
   },

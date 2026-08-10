@@ -4,6 +4,7 @@ import { AlertCircle, Loader2 } from "lucide-react";
 
 import { AuthProvider, useAuth } from "./AuthContext";
 import { isSupabaseConfigured } from "../lib/supabase";
+import logoLight from "figma:asset/aa1ba75230506f31800d027742b495f059fdb329.png";
 
 /**
  * /admin/login
@@ -50,9 +51,9 @@ function LoginForm() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#0B1C2C] px-6 py-12">
       <div className="w-full max-w-md">
-        <div className="text-center mb-10">
-          <span className="text-2xl font-bold tracking-wider text-white">BLUJEANSZ</span>
-          <p className="text-sm text-white/50 mt-2 uppercase tracking-wider">Content Manager</p>
+        <div className="flex flex-col items-center mb-10">
+          <img src={logoLight} alt="BLUJEANSZ" className="h-9 w-auto" />
+          <p className="text-sm text-white/50 mt-3 uppercase tracking-wider">Content Manager</p>
         </div>
 
         {!isSupabaseConfigured && (
