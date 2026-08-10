@@ -155,7 +155,7 @@ export function Prodculator() {
                 The Prodculator platform architecture and user interface were designed by
                 Blujeansz, creating a streamlined, accessible tool that translates complex
                 financial regulations into an intuitive digital experience. Our design
-                approach prioritized clarity, usability, and trust—essential elements
+                approach prioritized clarity, usability, and trust, all essential elements
                 for a platform handling financial information.
               </p>
 
@@ -177,7 +177,7 @@ export function Prodculator() {
                 details including project title, genre, format, budget ranges, preferred
                 currencies, location strategies, territories, filming schedules, camera
                 equipment, and cast information. The interface guides users through
-                selecting production priorities—whether maximizing incentive returns,
+                selecting production priorities, whether maximizing incentive returns,
                 achieving full picture quality, or optimizing location and creative fit.
               </p>
 

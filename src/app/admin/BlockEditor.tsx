@@ -219,7 +219,7 @@ function BlockFields({
             value={block.url}
             onChange={(e) => onChange({ ...block, url: e.target.value })}
             className={inputClass}
-            placeholder="Image URL — upload in Media, then paste the URL"
+            placeholder="Image URL, upload in Media, then paste the URL"
           />
           <input
             value={block.alt}

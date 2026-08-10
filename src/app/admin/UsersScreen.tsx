@@ -57,7 +57,7 @@ export function UsersScreen() {
     <>
       <PageHeader
         title="Users"
-        description="CMS accounts. There is no public sign-up — people are invited."
+        description="CMS accounts. There is no public sign-up; people are invited."
         action={
           <PrimaryButton onClick={() => setInviting(true)}>
             <UserPlus className="w-4 h-4" />

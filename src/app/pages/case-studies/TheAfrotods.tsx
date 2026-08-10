@@ -131,7 +131,7 @@ export function TheAfrotods() {
               <p>
                 To scale this vision, the project required a fully integrated ecosystem
                 spanning digital platforms, mobile applications, animated content, and
-                physical products—all working together to deliver a seamless educational
+                physical products, all working together to deliver a seamless educational
                 experience for children and parents worldwide.
               </p>
             </div>

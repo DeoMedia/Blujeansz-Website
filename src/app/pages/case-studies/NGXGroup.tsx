@@ -172,8 +172,8 @@ export function NGXGroup() {
                 Institutional Excellence
               </h3>
               <p>
-                Every element was executed to institutional standards—from brand
-                development to event execution—ensuring an experience worthy of
+                Every element was executed to institutional standards, from brand
+                development to event execution, ensuring an experience worthy of
                 Africa's leading stock exchange.
               </p>
             </div>

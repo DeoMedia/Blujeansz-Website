@@ -102,7 +102,7 @@ export function HeroSection() {
           className="text-base md:text-lg lg:text-[21px] text-[#D1D5DB] max-w-[640px] mx-auto mb-10 md:mb-12 px-4"
           style={{ lineHeight: '1.6' }}
         >
-          We build African brands that win globally—and global brands that win in Africa.
+          We build African brands that win globally and global brands that win in Africa.
         </motion.p>
 
         <motion.div

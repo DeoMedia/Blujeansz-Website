@@ -17,7 +17,7 @@ export function validateFile(file: File): string | null {
     return `${file.name}: only JPG, PNG and WebP images are allowed.`;
   }
   if (file.size > MAX_BYTES) {
-    return `${file.name}: file is ${(file.size / 1024 / 1024).toFixed(1)} MB — the limit is 10 MB.`;
+    return `${file.name}: file is ${(file.size / 1024 / 1024).toFixed(1)} MB. The limit is 10 MB.`;
   }
   return null;
 }

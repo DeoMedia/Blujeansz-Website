@@ -7,7 +7,7 @@ const locations = [
     name: "London",
     country: "United Kingdom",
     flag: "🇬🇧",
-    position: { top: "22%", left: "49%" },
+    position: { top: "17.0%", left: "49%" },
     cardAnchor: "right",
     address: ["Deo Media Limited UK", "Kent, United Kingdom"],
   },
@@ -15,7 +15,7 @@ const locations = [
     name: "Dubai",
     country: "United Arab Emirates",
     flag: "🇦🇪",
-    position: { top: "38%", left: "64%" },
+    position: { top: "35.9%", left: "64%" },
     cardAnchor: "left",
     address: ["Sanafre FZC LLC", "Sharjah"],
   },
@@ -23,7 +23,7 @@ const locations = [
     name: "Nigeria",
     country: "Lagos",
     flag: "🇳🇬",
-    position: { top: "50%", left: "46%" },
+    position: { top: "50.0%", left: "46%" },
     cardAnchor: "right",
     address: ["Olabode House", "Lagos"],
   },
@@ -31,7 +31,7 @@ const locations = [
     name: "East Africa",
     country: "Rwanda",
     flag: "🇷🇼",
-    position: { top: "56%", left: "58%" },
+    position: { top: "57.1%", left: "58%" },
     cardAnchor: "left",
     address: ["Kigali Office"],
   },
@@ -39,18 +39,22 @@ const locations = [
     name: "South Africa",
     country: "Johannesburg",
     flag: "🇿🇦",
-    position: { top: "74%", left: "52%" },
+    position: { top: "78.3%", left: "52%" },
     cardAnchor: "bottom",
     isHQ: true,
     address: ["Johannesburg, Randburg"],
   },
 ];
 
+// Pin coordinates are percentages of .map-container. That only lines up with
+// the landmasses while the container's aspect ratio matches the map artwork
+// (869x415). If they diverge, object-fit:contain letterboxes the image inside
+// the box while the pins keep using the full box, and they drift off the map.
 const connections = [
-  { x1: "52%", y1: "74%", x2: "49%", y2: "22%" },
-  { x1: "52%", y1: "74%", x2: "64%", y2: "38%" },
-  { x1: "52%", y1: "74%", x2: "46%", y2: "50%" },
-  { x1: "52%", y1: "74%", x2: "58%", y2: "56%" },
+  { x1: "52%", y1: "78.3%", x2: "49%", y2: "17.0%" },
+  { x1: "52%", y1: "78.3%", x2: "64%", y2: "35.9%" },
+  { x1: "52%", y1: "78.3%", x2: "46%", y2: "50.0%" },
+  { x1: "52%", y1: "78.3%", x2: "58%", y2: "57.1%" },
 ];
 
 export function GlobalFootprintSection() {
@@ -227,7 +231,10 @@ export function GlobalFootprintSection() {
   position:relative;
   width:100%;
   max-width:1200px;
-  aspect-ratio:16/9;
+  /* Matches the map artwork (869x415) exactly, so the image fills the box with
+     no letterboxing and container-% is the same coordinate space as image-%.
+     Do not change this without recalculating every pin position. */
+  aspect-ratio:869/415;
   margin-bottom:64px;
 }
 
@@ -371,8 +378,48 @@ export function GlobalFootprintSection() {
   }
   
   .map-container{
-    aspect-ratio:1/1;
+    /* Deliberately NOT overridden to 1/1. A square box letterboxed the map into
+       a band across the middle while the pins stayed spread over the full
+       square, which put them on blank white space. The ratio is kept and the
+       nodes are scaled down instead.
+
+       A 2.09:1 map is inherently short on a phone, so it runs edge to edge and
+       reclaims the section's 24px side padding as height. */
+    width:calc(100% + 48px);
+    margin-left:-24px;
+    margin-right:-24px;
     margin-bottom:48px;
+  }
+
+  .map-background{
+    /* Square off the corners once it is full bleed. */
+    border-radius:0;
+    border-left:none;
+    border-right:none;
+  }
+
+  .node-dot{
+    width:12px;
+    height:12px;
+    box-shadow:0 0 0 3px rgba(14,165,233,0.25);
+  }
+
+  .node-dot.hq{
+    width:17px;
+    height:17px;
+    box-shadow:
+      0 0 0 4px rgba(14,165,233,0.25),
+      0 0 12px rgba(14,165,233,0.5);
+  }
+
+  .node-glow{
+    width:30px;
+    height:30px;
+  }
+
+  .node-glow.hq{
+    width:42px;
+    height:42px;
   }
   
   .map-card{

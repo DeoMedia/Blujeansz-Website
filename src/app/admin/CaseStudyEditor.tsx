@@ -361,7 +361,7 @@ export function CaseStudyEditor() {
               Metrics
             </h2>
             <p className="text-xs text-gray-500 mb-4">
-              Free-form — any value and label, in any order. For example
+              Free-form: any value and label, in any order. For example
               <span className="font-medium"> 42%</span> /
               <span className="font-medium"> Increase in Engagement</span>.
             </p>

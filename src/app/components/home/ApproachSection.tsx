@@ -21,7 +21,7 @@ const steps = [
     icon: Rocket,
     title: "Activate",
     outcome: "Turn strategy into market presence",
-    description: "We execute campaigns that move audiences—from awareness to conversion, online to on-ground.",
+    description: "We execute campaigns that move audiences from awareness to conversion, online to on-ground.",
   },
   {
     number: "04",
@@ -47,7 +47,7 @@ export function ApproachSection() {
             How We Work
           </h2>
           <p className="text-xl lg:text-2xl text-gray-300 max-w-3xl">
-            A clear method designed to move from insight to impact—fast.
+            A clear method designed to move from insight to impact, fast.
           </p>
         </motion.div>
 

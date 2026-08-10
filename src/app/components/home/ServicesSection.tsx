@@ -26,12 +26,12 @@ const services = [
   {
     icon: Clapperboard,
     title: "Content Marketing",
-    description: "Impactful content strategies across platforms—from YouTube to TikTok—that drive engagement and growth.",
+    description: "Impactful content strategies across platforms, from YouTube to TikTok, that drive engagement and growth.",
   },
   {
     icon: Zap,
     title: "Through-The-Line Campaigns",
-    description: "Fully integrated campaigns from concept to execution—spanning media, activations, and on-ground presence.",
+    description: "Fully integrated campaigns from concept to execution, spanning media, activations, and on-ground presence.",
   },
 ];
 
@@ -50,7 +50,7 @@ export function ServicesSection() {
             Capabilities
           </h2>
           <p className="text-xl lg:text-2xl text-gray-600 max-w-3xl">
-            We solve problems across the full spectrum of brand and marketing—from strategy to execution.
+            We solve problems across the full spectrum of brand and marketing, from strategy to execution.
           </p>
         </motion.div>
 

@@ -163,7 +163,7 @@ export function Aradel() {
               </h3>
               <p>
                 Our team created detailed brand guidelines covering visual identity,
-                typography, color systems, imagery standards, and brand voice—providing
+                typography, color systems, imagery standards, and brand voice, providing
                 a complete framework for consistent brand expression.
               </p>
 

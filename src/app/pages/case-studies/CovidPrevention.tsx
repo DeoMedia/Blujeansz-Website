@@ -173,7 +173,7 @@ export function CovidPrevention() {
               <p>
                 Our team produced high-quality video content and supporting materials
                 that communicated complex health information in accessible, compelling
-                ways—cutting through misinformation with clear, evidence-based messaging.
+                ways, cutting through misinformation with clear, evidence-based messaging.
               </p>
 
               <h3 className="text-2xl font-bold text-[#0B1C2C] mt-8">
