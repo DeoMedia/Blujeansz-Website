@@ -1,0 +1,90 @@
+# BLUJEANSZ — Apache config for Bluehost shared hosting.
+#
+# Vite copies everything in public/ to dist/ untouched, so this ships with the
+# build. Upload it alongside index.html.
+
+# -----------------------------------------------------------------------------
+# SPA routing
+# -----------------------------------------------------------------------------
+# React Router owns the URLs. Without this, Apache looks for a real directory
+# called /insights/some-slug, does not find one, and returns its own 404 — so
+# every deep link and every browser refresh breaks. Anything that is not a real
+# file or directory is handed to index.html instead.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # Force HTTPS.
+  RewriteCond %{HTTPS} !=on
+  RewriteCond %{HTTP:X-Forwarded-Proto} !https
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+  # Leave real files and directories alone (assets, images, video, .htaccess).
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  RewriteRule ^ index.html [L]
+</IfModule>
+
+# -----------------------------------------------------------------------------
+# MIME types
+# -----------------------------------------------------------------------------
+# Older Apache builds on shared hosting do not always know WebP, which is what
+# nearly every image on this site is served as.
+<IfModule mod_mime.c>
+  AddType image/webp                  .webp
+  AddType image/svg+xml               .svg
+  AddType video/mp4                   .mp4
+  AddType application/javascript      .js
+  AddType application/json            .json
+  AddType font/woff2                  .woff2
+</IfModule>
+
+# -----------------------------------------------------------------------------
+# Compression
+# -----------------------------------------------------------------------------
+# Images and video are already compressed; re-compressing them wastes CPU.
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/css text/xml
+  AddOutputFilterByType DEFLATE application/javascript application/json
+  AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+
+# -----------------------------------------------------------------------------
+# Caching
+# -----------------------------------------------------------------------------
+# Vite fingerprints asset filenames, so those are safe to cache hard. index.html
+# must NOT be cached, or visitors keep loading an old build that points at
+# assets which no longer exist.
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType image/webp            "access plus 1 year"
+  ExpiresByType image/png             "access plus 1 year"
+  ExpiresByType image/jpeg            "access plus 1 year"
+  ExpiresByType image/svg+xml         "access plus 1 year"
+  ExpiresByType video/mp4             "access plus 1 year"
+  ExpiresByType font/woff2            "access plus 1 year"
+  ExpiresByType text/css              "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+</IfModule>
+
+<IfModule mod_headers.c>
+  <FilesMatch "\.(js|css|webp|png|jpe?g|svg|mp4|woff2)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+
+  <FilesMatch "\.(html)$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+
+  # Basic hardening.
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# Do not serve source maps or dotfiles if any end up uploaded.
+<FilesMatch "\.(map|env|log)$">
+  Require all denied
+</FilesMatch>

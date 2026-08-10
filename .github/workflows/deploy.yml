@@ -1,0 +1,68 @@
+name: Build and deploy to Bluehost
+
+on:
+  push:
+    branches: [main]
+  # Allows a manual re-deploy from the Actions tab without a new commit.
+  workflow_dispatch:
+
+# A second push while a deploy is mid-upload would interleave two sets of files
+# over FTP. Queue them instead, and never cancel a partial upload.
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Build
+        # VITE_* values are inlined into the bundle at build time, so they must
+        # be present here rather than on the server. Only the anon key belongs
+        # in this list — it is public by design and guarded by RLS. The
+        # service-role key must never appear in a frontend build.
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+          VITE_API_URL: ${{ secrets.VITE_API_URL }}
+        run: npm run build
+
+      - name: Verify the build looks deployable
+        # Catches an empty or half-written dist before it reaches the live site.
+        run: |
+          test -f dist/index.html || { echo "::error::dist/index.html missing"; exit 1; }
+          test -f dist/.htaccess || { echo "::error::dist/.htaccess missing — SPA routes will 404"; exit 1; }
+          echo "dist size: $(du -sh dist | cut -f1)"
+
+      - name: Deploy over FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          # Bluehost serves the primary domain from public_html. Change this if
+          # the site lives in a subdirectory or on an addon domain.
+          server-dir: ${{ secrets.FTP_SERVER_DIR }}
+          local-dir: ./dist/
+          protocol: ftps
+          # The action keeps a manifest on the server and uploads only what
+          # changed, which matters because the image set is large.
+          dangerous-clean-slate: false
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
