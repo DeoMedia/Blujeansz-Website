@@ -4,6 +4,7 @@ import { AlertCircle, Loader2 } from "lucide-react";
 
 import { AuthProvider, useAuth } from "./AuthContext";
 import { isSupabaseConfigured } from "../lib/supabase";
+import { isLocalAuthMode } from "../lib/api";
 import logoLight from "figma:asset/aa1ba75230506f31800d027742b495f059fdb329.png";
 
 /**
@@ -56,7 +57,7 @@ function LoginForm() {
           <p className="text-sm text-white/50 mt-3 uppercase tracking-wider">Content Manager</p>
         </div>
 
-        {!isSupabaseConfigured && (
+        {!isSupabaseConfigured && !isLocalAuthMode && (
           <div className="mb-6 p-4 bg-amber-500/10 border border-amber-500/30 rounded-sm flex gap-3">
             <AlertCircle className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
             <div className="text-sm text-amber-100">
@@ -93,7 +94,7 @@ function LoginForm() {
               autoComplete="username"
               value={email}
               onChange={(event) => setEmail(event.target.value)}
-              disabled={!isSupabaseConfigured || submitting}
+              disabled={(!isSupabaseConfigured && !isLocalAuthMode) || submitting}
               className="w-full px-4 py-3 border border-gray-300 rounded-sm focus:outline-none focus:border-[#0B1C2C] disabled:bg-gray-50 disabled:text-gray-400"
             />
           </div>
@@ -109,14 +110,14 @@ function LoginForm() {
               autoComplete="current-password"
               value={password}
               onChange={(event) => setPassword(event.target.value)}
-              disabled={!isSupabaseConfigured || submitting}
+              disabled={(!isSupabaseConfigured && !isLocalAuthMode) || submitting}
               className="w-full px-4 py-3 border border-gray-300 rounded-sm focus:outline-none focus:border-[#0B1C2C] disabled:bg-gray-50 disabled:text-gray-400"
             />
           </div>
 
           <button
             type="submit"
-            disabled={!isSupabaseConfigured || submitting}
+            disabled={(!isSupabaseConfigured && !isLocalAuthMode) || submitting}
             className="w-full flex items-center justify-center gap-2 bg-[#0B1C2C] text-white py-3 rounded-sm font-semibold hover:bg-[#1a3a52] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {submitting && <Loader2 className="w-4 h-4 animate-spin" />}

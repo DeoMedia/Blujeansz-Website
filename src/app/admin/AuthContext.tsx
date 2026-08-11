@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 
 import { supabase, isSupabaseConfigured } from "../lib/supabase";
-import { api, ApiError } from "../lib/api";
+import { api, ApiError, isLocalAuthMode, localToken } from "../lib/api";
 import type { Profile, UserRole } from "../types/database";
 
 interface AuthState {
@@ -45,6 +45,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [error, setError] = useState<string | null>(null);
 
   async function loadProfile() {
+    // Local mode: a stored token is the whole session.
+    if (isLocalAuthMode) {
+      if (!localToken.get()) {
+        setProfile(null);
+        setError(null);
+        setLoading(false);
+        return;
+      }
+      try {
+        setProfile(await api.get<Profile>("/me"));
+        setError(null);
+      } catch (err) {
+        localToken.clear();
+        setProfile(null);
+        setError(err instanceof ApiError ? err.message : "Could not load your profile.");
+      } finally {
+        setLoading(false);
+      }
+      return;
+    }
+
     if (!isSupabaseConfigured) {
       setProfile(null);
       setError(null);
@@ -77,7 +98,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     void loadProfile();
 
-    if (!isSupabaseConfigured) return;
+    if (isLocalAuthMode || !isSupabaseConfigured) return;
 
     const { data } = supabase.auth.onAuthStateChange(() => {
       void loadProfile();
@@ -92,6 +113,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       loading,
       error,
       signIn: async (email, password) => {
+        if (isLocalAuthMode) {
+          const { access_token } = await api.post<{ access_token: string }>(
+            "/auth/local/login",
+            { email, password },
+          );
+          localToken.set(access_token);
+          await loadProfile();
+          return;
+        }
+
         const { error: signInError } = await supabase.auth.signInWithPassword({
           email,
           password,
@@ -110,6 +141,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         await loadProfile();
       },
       signOut: async () => {
+        if (isLocalAuthMode) {
+          localToken.clear();
+          setProfile(null);
+          return;
+        }
         await supabase.auth.signOut();
         setProfile(null);
       },

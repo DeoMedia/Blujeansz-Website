@@ -40,7 +40,31 @@ export class ApiError extends Error {
   }
 }
 
+/**
+ * Local development mode.
+ *
+ * Supabase Auth is a hosted service, so when the API runs against a bare local
+ * Postgres there is no Supabase session to read a token from. In that mode the
+ * API issues the token itself and it is kept here.
+ *
+ * Off unless VITE_LOCAL_AUTH is explicitly "true".
+ */
+export const isLocalAuthMode = import.meta.env.VITE_LOCAL_AUTH === "true";
+
+const LOCAL_TOKEN_KEY = "blujeansz-local-token";
+
+export const localToken = {
+  get: () => (isLocalAuthMode ? localStorage.getItem(LOCAL_TOKEN_KEY) : null),
+  set: (token: string) => localStorage.setItem(LOCAL_TOKEN_KEY, token),
+  clear: () => localStorage.removeItem(LOCAL_TOKEN_KEY),
+};
+
 async function authHeader(): Promise<Record<string, string>> {
+  if (isLocalAuthMode) {
+    const token = localToken.get();
+    return token ? { Authorization: `Bearer ${token}` } : {};
+  }
+
   if (!isSupabaseConfigured) return {};
 
   const { data } = await supabase.auth.getSession();
